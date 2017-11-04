@@ -4,6 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 import sys
 import argparse
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
 
 best_price = 0
 
@@ -61,6 +64,28 @@ def check_flights(min_day, max_day):
         if (best_price > price_g_list[element].text):
             best_price = price_g_list[element].text
 
+def send_email():
+    msg = MIMEMultipart()
+    message = "Hello, best price is: ", best_price
+    msg['Subject'] = "Checking flights"
+    to = ""
+    me = ""
+    password = ""
+    msg['From'] = me
+    msg['To'] = to
+    msg.attach(MIMEText(message))
+
+    try:
+        s = smtplib.SMTP('smt.gmail.com', 587)
+        s.ehlo()
+        s.starttls()
+        s.ehlo()
+        s.login(me, password)
+        s.sendmail(me, to, msg.as_string())
+        s.guit()
+        print "Successfully sent message"
+    except:
+        print "Error: can not send mesage"
 #def main():
 #    for arg in sys.argv[1:]:
 #        print arg
@@ -77,4 +102,5 @@ if __name__ == "__main__":
     print "Starting checking flights"
     check_flights(min_day, max_day)
     print "Best price: ",best_price
+    #send_email()
     print "Checking done!"
