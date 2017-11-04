@@ -35,8 +35,16 @@ g_list = soup.findAll("div", {"class": "result"})
 date_g_list = soup.findAll("span", {"class": "date"}) 
 price_g_list = soup.findAll("span", {"class": "tp"})
 
+from_g_list = soup.findAll("span", {"class": "from"})
+to_g_list = soup.findAll("span", {"class": "to"})
+
 # print data
 for element in range(len(g_list)):
     print date_g_list[element * 2].text
+    print from_g_list[(element * 4)].text
+    print to_g_list[(element * 4)].text
     print date_g_list[(element * 2) + 1].text
+    print from_g_list[(element * 4) + 2].text
+    print to_g_list[(element * 4) + 2].text
     print price_g_list[element].text
+    print "\r\n\r\n"
