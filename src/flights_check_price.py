@@ -36,10 +36,6 @@ price_g_list = soup.findAll("div", {"class": "totalPrice"})
 for element in price_g_list:
     tp = element.find("span", {"class": "tp"})
     print tp.text
-#cap_tam = soup.find_all("div", {"class": "caption tam"})
-#cap_from = soup.find_all("span", {"class": "caption sem"})
-#print cap_from
-#detail_list = soup.find_all("div", {"class": "detail"})
 
 for element in g_list:
     date = element.findAll("span", {"class", "date"})
