@@ -11,27 +11,35 @@ from email.MIMEText import MIMEText
 best_price = 0
 
 def check_flights(min_day, max_day):
-    # url address with specific flight information 
+    # url address with specific flight information
     url = ("http://www.azair.com/azfin.php?tp=0&"
-       "searchtype=flexi&srcAirport=Warsaw+%"
-       "5BWAW%5D+%28%2BWMI%2CLCJ%2CLUZ%2CBZG"
-       "%29&srcTypedText=pra&srcFreeTypedText"
-       "=&srcMC=&srcap0=WMI&srcap1=LCJ&srcap3"
-       "=LUZ&srcap4=BZG&srcFreeAirport=&dstAirport"
-       "=Malaga+%5BAGP%5D&dstTypedText=mala&dstFreeTypedText"
-       "=&dstMC=&adults=1&children=0&infants=0&minHourStay="
-       "0%3A45&maxHourStay=23%3A20&minHourOutbound=0%3A00"
-       "&maxHourOutbound=24%3A00&minHourInbound=0%3A00&max"
-       "HourInbound=24%3A00&dstFreeAirport=&depdate="
-       "4.11.2017&arrdate=27.10.2018&minDaysStay="
-       "{0}&maxDaysStay={1}&nextday=0&autoprice=true&"
-       "currency=PLN&wizzxclub=false&supervolotea"
-       "=false&schengen=false&transfer=false&samedep"
-       "=true&samearr=true&dep0=true&dep1=true&dep2="
-       "true&dep3=true&dep4=true&dep5=true&dep6=true&arr0"
-       "=true&arr1=true&arr2=true&arr3=true&arr4=true&arr"
-       "5=true&arr6=true&maxChng=0&isOneway=return&resultSubmit=Search"
-           .format(min_day, max_day))
+           "searchtype=flexi&srcAirport=Warsaw+%"
+           "5BWAW%5D+%28%2BWMI%29&srcTypedText="
+           "war&srcFreeTypedText=&srcMC=WAR_ALL&"
+           "srcap0=WMI&srcFreeAirport=&dstAirport="
+           "Spain+%5BFUE%5D+%28%2BACE%2CLPA%2CTFN%"
+           "2CTFS%2CGMZ%2CVDE%2CSPC%2CALC%2CLEI%2COVD"
+           "%2CBIO%2CBCN%2CLCG%2CGRO%2CGRX%2CIBZ%2CXRY%"
+           "2CMJV%2CMAD%2CAGP%2CMAH%2CREU%2CEAS%2CSCQ%2CVLC"
+           "%2CVLL%2CVIT%2CVGO%2CSDR%2CZAZ%2CSVQ%2CPMI%2"
+           "CCDT%29&dstTypedText=spai&dstFreeTypedText=&"
+           "dstMC=ES&adults=1&children=0&infants=0&minHourStay="
+           "0%3A45&maxHourStay=23%3A20&minHourOutbound=0%3A00"
+           "&maxHourOutbound=24%3A00&minHourInbound=0%3A00&"
+           "maxHourInbound=24%3A00&dstap0=ACE&dstap2=LPA&dstap3"
+           "=TFN&dstap4=TFS&dstap5=GMZ&dstap6=VDE&dstap7=SPC&dstap8"
+           "=ALC&dstap9=LEI&dstap10=OVD&dstap11=BIO&dstap12=BCN&dstap13"
+           "=LCG&dstap14=GRO&dstap15=GRX&dstap16=IBZ&dstap17=XRY&dstap18"
+           "=MJV&dstap19=MAD&dstap20=AGP&dstap21=MAH&dstap22=REU&dstap23"
+           "=EAS&dstap24=SCQ&dstap25=VLC&dstap26=VLL&dstap27=VIT&dstap28"
+           "=VGO&dstap29=SDR&dstap30=ZAZ&dstap31=SVQ&dstap32=PMI&dstap33"
+           "=CDT&dstFreeAirport=&depdate=1.1.2018&arrdate=28.2.2018&"
+           "minDaysStay={0}&maxDaysStay={1}&nextday=0&autoprice=true&currency=PLN"
+           "&wizzxclub=false&supervolotea=false&schengen=false&transfer=false"
+           "&samedep=true&samearr=true&dep0=true&dep1=true&dep2=true&"
+           "dep3=true&dep4=true&dep5=true&dep6=true&arr0=true&arr1=true"
+           "&arr2=true&arr3=true&arr4=true&arr5=true&arr6=true&maxChng=0"
+           "&isOneway=return&resultSubmit=Search".format(min_day, max_day))
 
     # get request from website
     page = requests.get(url)
@@ -46,7 +54,7 @@ def check_flights(min_day, max_day):
     date_g_list = soup.findAll("span", {"class": "date"}) 
     price_g_list = soup.findAll("span", {"class": "tp"})
     global best_price
-    best_price = price_g_list[5].text
+    best_price = price_g_list[0].text
 
     from_g_list = soup.findAll("span", {"class": "from"})
     to_g_list = soup.findAll("span", {"class": "to"})
@@ -60,9 +68,10 @@ def check_flights(min_day, max_day):
         print "\t",from_g_list[(element * 4) + 2].text
         print "\t",to_g_list[(element * 4) + 2].text
         print price_g_list[element].text
-        print "\r\n\r\n"
         if (best_price > price_g_list[element].text):
             best_price = price_g_list[element].text
+            print ("Best price...", best_price)
+        print "\r\n\r\n"
 
 def send_email():
     msg = MIMEMultipart()
